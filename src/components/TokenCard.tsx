@@ -148,10 +148,12 @@ export default function TokenCard({ token, rank }: Props) {
           style={{ fontSize: 12, padding: '6px 14px' }}>
           {expanded ? 'Hide' : 'Top Holders'} ↓
         </button>
-        <a href={`https://bags.fm/token/${token.mint}`} target="_blank" rel="noopener noreferrer"
-          className="btn-ghost" style={{ fontSize: 12, padding: '6px 14px', textDecoration: 'none' }}>
-          View on Bags ↗
-        </a>
+        {!token.mint.startsWith('mock') && (
+  <a href={`https://bags.fm/token/${token.mint}`} target="_blank" rel="noopener noreferrer"
+    className="btn-ghost" style={{ fontSize: 12, padding: '6px 14px', textDecoration: 'none' }}>
+    View on Bags ↗
+  </a>
+)}
       </div>
 
       {/* Holders list */}
