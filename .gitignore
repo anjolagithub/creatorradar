@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Environment variables (NEVER commit these - contains your API keys!)
+.env
+.env.local
+.env.production
+
+# Next.js build output
+.next/
+out/
+
+# Misc
+.DS_Store
+*.log
+.vercel
