@@ -1,10 +1,9 @@
 // lib/score.ts
-// Uses Claude to produce a 0-100 momentum score for each token
+// Uses Groq (free) to produce a 0-100 momentum score for each token
 
-import Anthropic from '@anthropic-ai/sdk'
 import type { TokenSummary } from './bags'
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+const GROQ_API_KEY = process.env.GROQ_API_KEY!
 
 export interface ScoredToken extends TokenSummary {
   momentumScore: number
@@ -17,10 +16,6 @@ export interface ScoredToken extends TokenSummary {
   aiInsight: string
 }
 
-/**
- * Score a batch of tokens with Claude.
- * We batch them in one prompt to save API calls.
- */
 export async function scoreTokens(tokens: TokenSummary[]): Promise<ScoredToken[]> {
   if (tokens.length === 0) return []
 
@@ -62,13 +57,22 @@ ${JSON.stringify(tokens.map(t => ({
 Return ONLY the JSON array, no markdown, no explanation.`
 
   try {
-    const msg = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 2000,
-      messages: [{ role: 'user', content: prompt }],
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${GROQ_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        max_tokens: 2000,
+        messages: [{ role: 'user', content: prompt }],
+      }),
     })
 
-    const raw = msg.content[0].type === 'text' ? msg.content[0].text : ''
+    const data = await response.json()
+    console.log('Groq response:', JSON.stringify(data))
+    const raw = data.choices[0]?.message?.content ?? ''
     const clean = raw.replace(/```json|```/g, '').trim()
     const scores: any[] = JSON.parse(clean)
 
@@ -84,7 +88,6 @@ Return ONLY the JSON array, no markdown, no explanation.`
     })
   } catch (err) {
     console.error('Score error:', err)
-    // Fallback: simple deterministic score
     return tokens.map(t => ({
       ...t,
       momentumScore: Math.min(100, Math.round(
