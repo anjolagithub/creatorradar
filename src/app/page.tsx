@@ -182,7 +182,7 @@ export default function Home() {
             style={{ color: 'var(--green)', textDecoration: 'none' }}>
             Bags Hackathon
           </a>
-          {' '}· Powered by Bags SDK + Claude AI
+          {' '}· Powered by Bags SDK + Groq AI
         </div>
       </div>
     </main>

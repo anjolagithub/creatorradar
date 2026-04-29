@@ -3,20 +3,41 @@
 > AI-powered momentum scoring for creator tokens on Bags.fm
 
 **Hackathon Track**: AI Agents + Social Finance  
-**Built for**: Bags Hackathon ($1M prize pool)
+**Built for**: Bags Hackathon ($1M prize pool)  
+**Live Demo**: https://creatorradar-theta.vercel.app  
+**Built by**: @anjolagithub
 
 ---
 
 ## What it does
 
-CreatorRadar monitors every creator token on Bags.fm and uses Claude AI to produce a 0-100 momentum score based on:
+CreatorRadar is a Bloomberg Terminal for Bags.fm. It monitors every creator token and uses AI to score them 0-100 on momentum potential — so traders can find the signal and skip the noise.
 
+Every token gets scored across 4 dimensions:
 - **Holder momentum** — community growth signals
-- **Fee velocity** — sustained trading / creator earnings
-- **Price strength** — recent direction
+- **Fee velocity** — sustained trading / creator earnings  
+- **Price strength** — recent price direction
 - **Volume health** — trading activity depth
 
-It also shows the top wallet holders per token so you can one-click copy their addresses for copy-trading.
+Traders can also view top holders per token and copy their wallet addresses for copy-trading.
+
+---
+
+## Why it matters
+
+Right now every Bags trader is flying blind. CreatorRadar gives them a radar. It's the first AI-powered token intelligence dashboard built specifically for the Bags ecosystem.
+
+---
+
+## Tech Stack
+
+| Layer | Tool |
+|---|---|
+| Frontend | Next.js + Tailwind |
+| Token Data | Bags REST API + SDK |
+| AI Scoring | Groq (llama-3.3-70b) |
+| Blockchain | Solana via Helius RPC |
+| Hosting | Vercel |
 
 ---
 
@@ -24,18 +45,18 @@ It also shows the top wallet holders per token so you can one-click copy their a
 
 ### 1. Clone & install
 ```bash
-git clone <your-repo>
-cd creatorrader
-npm install
+git clone https://github.com/anjolagithub/creatorradar
+cd creatorradar
+npm install --legacy-peer-deps
 ```
 
 ### 2. Get API keys (all free)
 
-| Key | Where to get it |
+| Key | Where |
 |---|---|
 | `BAGS_API_KEY` | https://dev.bags.fm/login |
-| `HELIUS_RPC_URL` | https://dev.helius.xyz (free tier) |
-| `ANTHROPIC_API_KEY` | https://console.anthropic.com |
+| `HELIUS_RPC_URL` | https://dev.helius.xyz |
+| `GROQ_API_KEY` | https://console.groq.com |
 
 ### 3. Set environment variables
 ```bash
@@ -43,68 +64,34 @@ cp .env.example .env.local
 # fill in your keys
 ```
 
-### 4. Launch your token on Bags (required for submission)
-- Go to https://bags.fm
-- Launch a token for your project
-- Copy the mint address into `PROJECT_TOKEN_MINT` in `.env.local`
-
-### 5. Run locally
+### 4. Run locally
 ```bash
 npm run dev
 # → http://localhost:3000
 ```
 
-### 6. Deploy to Vercel (free)
+### 5. Deploy
 ```bash
-npx vercel deploy
-# Add env vars in Vercel dashboard
+npx vercel --prod
 ```
 
 ---
 
 ## Project structure
-
-```
 src/
 ├── app/
 │   ├── page.tsx              # Main dashboard UI
-│   ├── layout.tsx            # Root layout + metadata
+│   ├── layout.tsx            # Root layout
 │   ├── globals.css           # Dark crypto aesthetic
 │   └── api/
-│       ├── tokens/route.ts   # GET /api/tokens — scored leaderboard
-│       └── holders/route.ts  # GET /api/holders?mint=... — top holders
+│       ├── tokens/route.ts   # GET /api/tokens — AI scored leaderboard
+│       └── holders/route.ts  # GET /api/holders — top holders per token
 ├── components/
-│   └── TokenCard.tsx         # Individual token card with score ring
+│   └── TokenCard.tsx         # Token card with score ring + AI insight
 └── lib/
-    ├── bags.ts               # Bags SDK + REST API helpers
-    └── score.ts              # Claude AI scoring engine
-```
+├── bags.ts               # Bags SDK + REST API helpers
+└── score.ts              # Groq AI scoring engine
 
 ---
 
-## How the AI scoring works
 
-`lib/score.ts` batches all tokens into a single Claude prompt asking it to:
-1. Score each token 0-100 across 4 sub-dimensions (max 25 each)
-2. Return a one-line insight explaining the score
-
-Claude returns structured JSON. If the API fails, a deterministic fallback kicks in so the app never breaks.
-
----
-
-## Hackathon submission checklist
-
-- [ ] Launched project token on Bags
-- [ ] Deployed to Vercel
-- [ ] Recorded 3-5 min demo video
-- [ ] GitHub repo is public
-- [ ] Submitted at bags.fm hackathon portal
-
----
-
-## Why this wins
-
-1. **Deep Bags API integration** — uses SDK, REST API, token data, holder data, fee data
-2. **Real traction mechanism** — creators share their score, traders share copy-trade wins
-3. **AI track + Social Finance** — two high-value tracks, one submission
-4. **$0 cost to run** — all free tiers, judges can verify it live

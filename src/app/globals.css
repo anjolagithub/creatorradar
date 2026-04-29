@@ -144,3 +144,17 @@ body::before {
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+
+@media (max-width: 768px) {
+  main {
+    padding: 20px 12px !important;
+  }
+
+  h1 {
+    font-size: 28px !important;
+  }
+
+  .card {
+    padding: 12px !important;
+  }
+}
