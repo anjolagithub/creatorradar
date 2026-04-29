@@ -86,10 +86,10 @@ export async function getTopTokens(limit = 20): Promise<TokenSummary[]> {
 
 /** Get top holders for a token */
 export async function getTopHolders(mint: string, limit = 20): Promise<HolderInfo[]> {
-  const sdk = getSDK()
   try {
-    const holders = await sdk.analytics.getTokenHolders(new PublicKey(mint))
-    return holders.slice(0, limit).map((h: any) => ({
+    const res = await bagsGet(`/token-launch/holders?tokenMint=${mint}&limit=${limit}`)
+    const items = res.response ?? res.holders ?? []
+    return items.slice(0, limit).map((h: any) => ({
       wallet: h.wallet ?? h.address,
       amount: h.amount ?? h.balance ?? 0,
       percentage: h.percentage ?? 0,
