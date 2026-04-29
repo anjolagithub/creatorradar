@@ -84,7 +84,7 @@ export default function TokenCard({ token, rank }: Props) {
         </div>
 
         {/* Stats */}
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexShrink: 0, flexWrap: 'wrap' }}>
+        <div className="stats-row" style={{ display: 'flex', gap: 12, alignItems: 'center', flexShrink: 0, flexWrap: 'wrap' }}>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: 12, color: 'var(--muted)' }}>Price</div>
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: 'var(--text)' }}>

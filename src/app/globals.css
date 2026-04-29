@@ -158,3 +158,18 @@ body::before {
     padding: 12px !important;
   }
 }
+@media (max-width: 640px) {
+  .stats-row {
+    display: none !important;
+  }
+  .score-ring-mobile {
+    display: flex !important;
+  }
+  .token-card-main {
+    flex-wrap: wrap !important;
+  }
+  .sort-buttons {
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+  }
+}
